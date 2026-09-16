@@ -18,13 +18,15 @@ Katalog.
 - **Oben** steht ein Haus im Querschnitt, auf dem alle acht Leistungen vorkommen: Steildach,
   Dämmung, Dachfenster, Flachdach, Gründach, Dachterrasse, Rinnen und Kamin, dazu eine Leiter
   für Reparatur und Wartung. Beim Laden baut es sich Schicht für Schicht auf.
-- **„Dachaufbau“** zeigt die Traufe eines geneigten Dachs im Detail. Beim Scrollen kommt eine
-  Schicht nach der anderen dazu, von der Dämmung bis zur Rinne, jeweils mit kurzer Erklärung.
+- **„Dachaufbau“** zeigt die Traufe eines geneigten Dachs im Detail. Ein Schicht-Schalter
+  führt von der Dämmung bis zur Rinne, jeweils mit kurzer Erklärung. Kommt der Abschnitt ins
+  Bild, legt sich einmal Schicht für Schicht auf; danach tippt man selbst weiter.
 - **Die Leistungen** zeigen jeweils einen Ausschnitt aus derselben Hauszeichnung. Rot ist die
   Stelle, um die es geht.
 
-Farben und Logo kommen aus dem bestehenden Logo „Das Team für’s Dach“. Das Logo ist
-originalgetreu als scharfe Vektorgrafik nachgezeichnet, ohne den grauen Kasten.
+Farben und Logo kommen aus dem bestehenden Logo „Das Team für’s Dach“: **Blau** für Schrift,
+Linien und Knöpfe, **Rot** nur als Akzent. Das Logo ist originalgetreu als scharfe
+Vektorgrafik nachgezeichnet, ohne den grauen Kasten.
 
 ## Aufbau
 
@@ -38,7 +40,7 @@ originalgetreu als scharfe Vektorgrafik nachgezeichnet, ohne den grauen Kasten.
 ```
 assets/
   css/style.css       das gesamte Design
-  js/main.js          Menü, Aufbau der Zeichnung, Dachaufbau beim Scrollen, Rechner, Formulare
+  js/main.js          Menü, Aufbau der Zeichnung, Schicht-Schalter, Rechner, Formulare
   fonts/              Barlow und Barlow Semi Condensed, lokal (SIL Open Font License 1.1)
   img/                Logo (SVG), Foto Kirchendach (AVIF/WebP/JPEG), Vorschaubild
 .htaccess             Serverregeln für ALL-INKL (https, Komprimierung, Cache)

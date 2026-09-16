@@ -14,7 +14,6 @@
 
   /* ---------- Kopfleiste ---------- */
   var kopf = document.getElementById("kopf");
-  function kopfHoehe() { return kopf ? kopf.offsetHeight : 0; }
   function messeKopf() {
     if (kopf) html.style.setProperty("--kopf-h", kopf.offsetHeight + "px");
   }
@@ -54,81 +53,81 @@
     window.requestAnimationFrame(function () { schnitt.classList.add("baut-auf"); });
   }
 
-  /* ---------- Schicht für Schicht ----------
-     Nur am großen Bildschirm mit genug Höhe: Die Zeichnung bleibt stehen,
-     der Scrollweg des Abschnitts wird in fünf gleiche Stücke geteilt.
-     Überall sonst bleibt die Zeichnung komplett und die Liste offen. */
+  /* ---------- Dachaufbau: Schicht-Schalter ----------
+     Bewusst kein klebender Scroll-Abschnitt (den hat schon der Statiker).
+     Kommt der Abschnitt ins Bild, legt sich einmal Schicht für Schicht auf,
+     alle 2,8 Sekunden eine. Tippt jemand selbst, hört das Abspielen auf.
+     Bei „Bewegung reduzieren“ bleibt die Zeichnung komplett stehen. */
   var aufbau = document.querySelector("[data-aufbau]");
-  var buehne = aufbau ? aufbau.querySelector(".aufbau__buehne") : null;
   var schritte = aufbau ? Array.prototype.slice.call(aufbau.querySelectorAll(".schritt")) : [];
   var ANZAHL = schritte.length;
-  var aufbauMedien = window.matchMedia("(min-width: 1001px) and (min-height: 640px)");
-  var aufbauAn = false;
-  var letzter = -1;
 
-  function setzeSchritt(n) {
-    if (n === letzter) return;
-    letzter = n;
-    for (var i = 1; i <= ANZAHL; i++) {
-      aufbau.classList.toggle("ab-" + i, i <= n);
-      aufbau.classList.toggle("aktiv-" + i, i === n);
-    }
+  if (aufbau && ANZAHL) {
+    var steuerung = aufbau.querySelector(".aufbau__steuerung");
+    var stand = aufbau.querySelector(".aufbau__stand");
+    var zurueck = aufbau.querySelector('[data-schicht="zurueck"]');
+    var weiter = aufbau.querySelector('[data-schicht="weiter"]');
+    var aktuell = 0;
+    var takt = null;
+    var selbst = reduceMotion;      // true = läuft nicht (mehr) von selbst
+    var imBild = false;
+
+    html.classList.add("aufbau-js");
+    if (steuerung) steuerung.hidden = false;
+
+    var setzeSchritt = function (n) {
+      aktuell = klemme(n, 1, ANZAHL);
+      for (var i = 1; i <= ANZAHL; i++) {
+        aufbau.classList.toggle("ab-" + i, i <= aktuell);
+        aufbau.classList.toggle("aktiv-" + i, i === aktuell);
+      }
+      schritte.forEach(function (li, i) {
+        li.classList.toggle("is-aktiv", i + 1 === aktuell);
+        li.classList.toggle("is-fertig", i + 1 < aktuell);
+        li.querySelector(".schritt__knopf").setAttribute("aria-expanded", String(i + 1 === aktuell));
+      });
+      if (stand) stand.textContent = "Schicht " + aktuell + " von " + ANZAHL;
+      if (zurueck) zurueck.disabled = aktuell === 1;
+      if (weiter) weiter.disabled = aktuell === ANZAHL;
+    };
+
+    var planen = function () {
+      window.clearTimeout(takt);
+      if (selbst || !imBild || aktuell >= ANZAHL || document.hidden) return;
+      takt = window.setTimeout(function () { setzeSchritt(aktuell + 1); planen(); }, 2800);
+    };
+    var uebernehmen = function () { selbst = true; window.clearTimeout(takt); };
+
     schritte.forEach(function (li, i) {
-      li.classList.toggle("is-aktiv", i + 1 === n);
-      li.classList.toggle("is-fertig", i + 1 < n);
+      li.querySelector(".schritt__knopf").addEventListener("click", function () { uebernehmen(); setzeSchritt(i + 1); });
     });
-  }
+    if (zurueck) zurueck.addEventListener("click", function () { uebernehmen(); setzeSchritt(aktuell - 1); });
+    if (weiter) weiter.addEventListener("click", function () { uebernehmen(); setzeSchritt(aktuell + 1); });
+    aufbau.addEventListener("keydown", function (e) {
+      if (!e.target.closest(".schritt__knopf, [data-schicht]")) return;
+      if (e.key === "ArrowDown" || e.key === "ArrowRight") { e.preventDefault(); uebernehmen(); setzeSchritt(aktuell + 1); }
+      if (e.key === "ArrowUp" || e.key === "ArrowLeft") { e.preventDefault(); uebernehmen(); setzeSchritt(aktuell - 1); }
+    });
+    document.addEventListener("visibilitychange", planen);
 
-  function pruefeAufbau() {
-    if (!aufbau) return;
-    var soll = !reduceMotion && aufbauMedien.matches;
-    if (soll === aufbauAn) return;
-    aufbauAn = soll;
-    html.classList.toggle("aufbau-an", soll);
-    letzter = -1;
-    if (!soll) {
-      for (var i = 1; i <= ANZAHL; i++) aufbau.classList.remove("ab-" + i, "aktiv-" + i);
-      schritte.forEach(function (li) { li.classList.remove("is-aktiv", "is-fertig"); });
+    // Ohne Abspielen gleich alles zeigen, sonst mit der ersten Schicht beginnen
+    setzeSchritt(selbst ? ANZAHL : 1);
+
+    if (!selbst && hatIO) {
+      new IntersectionObserver(function (eintraege) {
+        imBild = eintraege[0].isIntersecting;
+        planen();
+      }, { threshold: 0.45 }).observe(aufbau.querySelector(".aufbau__zeichnung"));
+    } else if (!selbst) {
+      setzeSchritt(ANZAHL);
     }
   }
-  pruefeAufbau();
-  if (aufbauMedien.addEventListener) aufbauMedien.addEventListener("change", function () { pruefeAufbau(); bild(); });
 
-  // Klick auf einen Schritt springt an seine Stelle im Scrollweg
-  schritte.forEach(function (li, i) {
-    li.addEventListener("click", function (e) {
-      if (!aufbauAn || e.target.closest("a")) return;
-      var weg = aufbau.offsetHeight - buehne.offsetHeight;
-      var oben = aufbau.getBoundingClientRect().top + window.scrollY - kopfHoehe() - window.innerHeight * 0.15;
-      window.scrollTo({ top: oben + weg * (i + 0.5) / ANZAHL, behavior: "smooth" });
-    });
-  });
-
-  /* ---------- Ein gemeinsamer Scroll-Takt ---------- */
-  var geplant = false;
+  /* ---------- Kopfleiste: Linie beim Scrollen ---------- */
   var navLinks = nav ? Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]')) : [];
-
-  function bild() {
-    geplant = false;
-    if (kopf) kopf.classList.toggle("is-stuck", window.scrollY > 8);
-
-    if (aufbauAn && buehne) {
-      var r = aufbau.getBoundingClientRect();
-      var weg = aufbau.offsetHeight - buehne.offsetHeight;
-      // Die Bühne klebt unter der Kopfleiste. Jede Schicht kommt etwas früher,
-      // damit die letzte noch in Ruhe zu sehen ist, bevor die Bühne weiterzieht.
-      var fortschritt = weg > 0 ? klemme((kopfHoehe() - r.top + window.innerHeight * 0.15) / weg, 0, 0.9999) : 1;
-      setzeSchritt(Math.floor(fortschritt * ANZAHL) + 1);
-    }
-  }
-  function planeBild() {
-    if (geplant) return;
-    geplant = true;
-    window.requestAnimationFrame(bild);
-  }
-  window.addEventListener("scroll", planeBild, { passive: true });
-  window.addEventListener("resize", planeBild);
-  bild();
+  function kopfLinie() { if (kopf) kopf.classList.toggle("is-stuck", window.scrollY > 8); }
+  window.addEventListener("scroll", kopfLinie, { passive: true });
+  kopfLinie();
 
   /* ---------- Aktiver Menüpunkt ---------- */
   if (hatIO && navLinks.length) {
