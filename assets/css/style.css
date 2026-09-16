@@ -1,0 +1,553 @@
+/* =========================================================
+   von Dungen GmbH & Co. KG — Entwurf „Dachschnitt“
+   Papier, Tusche und die beiden Farben aus dem Logo.
+   Rot nur für Knöpfe und die gerade beschriebene Schicht,
+   Blau für die dunklen Flächen.
+   ========================================================= */
+
+@font-face { font-family: "Barlow"; font-style: normal; font-weight: 400; font-display: swap; src: url("../fonts/barlow-400.woff2") format("woff2"); }
+@font-face { font-family: "Barlow"; font-style: normal; font-weight: 500; font-display: swap; src: url("../fonts/barlow-500.woff2") format("woff2"); }
+@font-face { font-family: "Barlow"; font-style: normal; font-weight: 600; font-display: swap; src: url("../fonts/barlow-600.woff2") format("woff2"); }
+@font-face { font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 600; font-display: swap; src: url("../fonts/barlow-semi-condensed-600.woff2") format("woff2"); }
+@font-face { font-family: "Barlow Semi Condensed"; font-style: normal; font-weight: 700; font-display: swap; src: url("../fonts/barlow-semi-condensed-700.woff2") format("woff2"); }
+
+:root {
+  --papier: #f5f3ee;
+  --papier-2: #ebe7df;
+  --weiss: #fffdf9;
+  --tusche: #1a2130;
+  --grau: #585e6a;
+  --bestand: #a3a6ad;
+  --haar: #d8d2c7;
+  --rot: #c8322b;            /* Knöpfe: weiße Schrift erreicht 5,4 : 1 */
+  --rot-dunkel: #a5271f;
+  --rot-logo: #e2413b;
+  --blau: #1f3486;
+  --nacht: #131b38;           /* Logo-Blau, stark abgedunkelt */
+  --nacht-2: #1b2548;
+
+  --schrift: "Barlow", "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  --titel: "Barlow Semi Condensed", "Arial Narrow", "Segoe UI", Arial, sans-serif;
+  --ease: cubic-bezier(.22, .8, .24, 1);
+  --rand: clamp(1.1rem, .6rem + 2.4vw, 2.5rem);
+  --breite: 1240px;
+  --kopf-h: 76px;
+  --radius: 14px;
+
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: calc(var(--kopf-h) + 12px); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--papier);
+  color: var(--tusche);
+  font: 400 1.0625rem/1.6 var(--schrift);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; }
+button { font: inherit; }
+h1, h2, h3, h4 { font-family: var(--titel); font-weight: 700; line-height: 1.05; letter-spacing: -.01em; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+address { font-style: normal; }
+:focus-visible { outline: 3px solid var(--rot); outline-offset: 3px; border-radius: 4px; }
+
+.shell { width: 100%; max-width: var(--breite); margin-inline: auto; padding-inline: var(--rand); }
+.shell--schmal { max-width: 820px; }
+
+.skip-link {
+  position: absolute; left: 1rem; top: -4rem; z-index: 100;
+  background: var(--tusche); color: #fff; padding: .7rem 1rem; border-radius: 8px; text-decoration: none;
+}
+.skip-link:focus { top: 1rem; }
+
+.etikett {
+  display: inline-flex; align-items: center; gap: .55rem;
+  font: 600 .8125rem/1 var(--schrift); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--grau);
+}
+.etikett::before { content: ""; width: 1.6rem; height: 2px; background: var(--rot-logo); }
+.etikett--ohne::before { display: none; }
+
+.ico { width: 1.15em; height: 1.15em; fill: currentColor; flex: none; }
+
+/* ---------- Knöpfe ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
+  min-height: 3.25rem; padding: .8rem 1.4rem;
+  border: 2px solid transparent; border-radius: 999px;
+  font: 600 1.0625rem/1.1 var(--schrift); text-decoration: none; cursor: pointer;
+  transition: background-color .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease);
+}
+.btn:active { transform: translateY(1px); }
+.btn--rot { background: var(--rot); color: #fff; }
+.btn--rot:hover { background: var(--rot-dunkel); }
+.btn--linie { border-color: var(--tusche); color: var(--tusche); background: transparent; }
+.btn--linie:hover { background: var(--tusche); color: var(--papier); }
+.btn--hell { background: #fff; color: var(--nacht); }
+.btn--hell:hover { background: var(--papier-2); }
+.btn--linie-hell { border-color: rgba(255,255,255,.55); color: #fff; }
+.btn--linie-hell:hover { background: #fff; color: var(--nacht); }
+/* Die Telefonnummer als rote Pille: weißer Kreis mit Hörer, wie ein Knopf */
+.btn--pille { padding: .35rem 1.15rem .35rem .35rem; min-height: 2.9rem; gap: .65rem; }
+.btn--pille .btn__kreis {
+  display: grid; place-items: center; width: 2.2rem; height: 2.2rem; border-radius: 50%;
+  background: #fff; color: var(--rot);
+}
+.btn--pille:hover .btn__kreis { color: var(--rot-dunkel); }
+.btn--pille .ico { width: 1.05rem; height: 1.05rem; }
+
+/* =========================================================
+   Kopfleiste
+   ========================================================= */
+.kopf {
+  position: sticky; top: 0; z-index: 50;
+  transition: box-shadow .3s var(--ease);
+}
+/* Unschärfe auf ::before, nicht auf der Leiste selbst: backdrop-filter
+   machte bei Susanbau die Kopfleiste zum Bezugsrahmen des festen Handy-Menüs. */
+.kopf::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: rgba(245, 243, 238, .9);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .3s var(--ease);
+}
+.kopf.is-stuck::before { border-bottom-color: var(--haar); }
+.kopf__in { display: flex; align-items: center; gap: 1.5rem; min-height: var(--kopf-h); }
+.marke { display: block; flex: none; padding-block: .45rem; }
+.marke img { height: 3.9rem; width: auto; }
+
+.nav { display: flex; align-items: center; gap: .15rem; margin-left: auto; }
+.nav a:not(.btn) {
+  position: relative; padding: .6rem .8rem; border-radius: 8px;
+  font-weight: 500; text-decoration: none; color: var(--tusche);
+}
+.nav a:not(.btn)::after {
+  content: ""; position: absolute; left: .8rem; right: .8rem; bottom: .35rem; height: 2px;
+  background: var(--rot-logo); transform: scaleX(0); transform-origin: left; transition: transform .25s var(--ease);
+}
+.nav a:not(.btn):hover::after, .nav a.is-aktiv::after, .nav a[aria-current="page"]::after { transform: scaleX(1); }
+.nav .btn { margin-left: .8rem; }
+.nav__nur-mobil { display: none; }
+
+.burger {
+  display: none; margin-left: auto; width: 3rem; height: 3rem; border: 0; border-radius: 10px;
+  background: transparent; cursor: pointer; position: relative;
+}
+.burger span { position: absolute; left: .75rem; right: .75rem; height: 2px; background: var(--tusche); transition: transform .25s var(--ease), opacity .2s; }
+.burger span:nth-child(1) { top: 1.05rem; }
+.burger span:nth-child(2) { top: 1.45rem; }
+.burger span:nth-child(3) { top: 1.85rem; }
+.burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(.4rem) rotate(45deg); }
+.burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-.4rem) rotate(-45deg); }
+
+@media (max-width: 1180px) {
+  .nav a:not(.btn) { padding-inline: .6rem; }
+  .nav a:not(.btn)::after { left: .6rem; right: .6rem; }
+}
+@media (max-width: 1060px) {
+  .burger { display: block; }
+  .nav {
+    position: fixed; left: 0; right: 0; top: var(--kopf-unten, var(--kopf-h)); bottom: 0;
+    flex-direction: column; align-items: stretch; gap: 0;
+    padding: 1rem var(--rand) 2rem; background: var(--papier);
+    border-top: 1px solid var(--haar);
+    overflow-y: auto; visibility: hidden; opacity: 0; transform: translateY(-.5rem);
+    transition: opacity .25s var(--ease), transform .25s var(--ease), visibility 0s .25s;
+  }
+  .nav.is-open { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
+  .nav a:not(.btn) { font: 700 1.6rem/1.2 var(--titel); padding: .85rem 0; border-bottom: 1px solid var(--haar); border-radius: 0; }
+  .nav a:not(.btn)::after { display: none; }
+  .nav .btn { margin: 1.4rem 0 0; }
+  .nav__nur-mobil { display: inline-flex; }
+  body.nav-open { overflow: hidden; }
+}
+@media (max-width: 560px) {
+  :root { --kopf-h: 64px; }
+  .marke img { height: 2.7rem; }
+}
+
+/* =========================================================
+   Hero: Überschrift links, Hausschnitt rechts
+   ========================================================= */
+.held { padding-block: clamp(1.8rem, 1rem + 3vw, 3.5rem) clamp(2.5rem, 1.5rem + 3vw, 4.5rem); overflow: hidden; }
+/* Oben Überschrift und Knöpfe, darunter die Zeichnung über die ganze Breite */
+.held__kopf { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 1.5rem clamp(2rem, 5vw, 5rem); align-items: end; }
+.held h1 { font-size: clamp(3rem, 1.4rem + 5.6vw, 6.4rem); margin-top: 1rem; line-height: .92; }
+.held h1 .rot { color: var(--rot-logo); }
+.held__lead { font-size: clamp(1.1rem, 1rem + .35vw, 1.3rem); color: var(--grau); max-width: 30rem; }
+.held__knoepfe { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
+
+.held__zeichnung { margin: clamp(1.2rem, 3vw, 2.8rem) 0 0; }
+.held__fuss { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 1rem 2rem; margin-top: 1.2rem; padding-top: 1.1rem; border-top: 1px solid var(--haar); }
+.held__fakten { display: grid; grid-template-columns: repeat(3, auto); gap: .6rem clamp(1.4rem, 4vw, 3.5rem); margin: 0; padding: 0; list-style: none; }
+.held__fakten li { display: flex; flex-direction: column; }
+.held__fakten b { font: 700 clamp(1.6rem, 1.2rem + 1vw, 2.2rem)/1 var(--titel); }
+.held__fakten span { font-size: .9375rem; color: var(--grau); }
+.held__bildtext { font-size: .875rem; color: var(--grau); }
+
+@media (max-width: 900px) {
+  .held__kopf { grid-template-columns: 1fr; }
+  .held__zeichnung { margin-inline: calc(var(--rand) * -.5); }
+  .held__fuss { margin-inline: calc(var(--rand) * .5); }
+}
+@media (max-width: 480px) {
+  .held__fakten { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem 1rem; }
+  .held__fakten span { font-size: .8125rem; line-height: 1.3; }
+}
+
+/* =========================================================
+   Zeichnungen: gemeinsame Linien
+   Alle Zustände laufen über geerbte CSS-Variablen, weil dieselbe
+   Zeichnung per <use> in den Leistungs-Kacheln wiederkehrt und
+   Selektoren dort nicht hineinreichen. Aus demselben Grund stehen
+   .l, .f usw. ohne .zeichnung davor: In der <use>-Kopie gibt es
+   diesen Vorfahren nicht, die Linien wären sonst schwarz gefüllt.
+   ========================================================= */
+.zeichnung { width: 100%; height: auto; overflow: hidden; }
+.schnitt-held { overflow: visible; }
+.l {
+  fill: none; stroke: currentColor; stroke-width: 1.4px;
+  vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-linecap: round;
+}
+.l--fein { stroke-width: .8px; }
+.l--boden { stroke-width: 2px; }
+.l--daemm { stroke-width: .9px; }
+.l--strich { stroke-dasharray: 5 4; stroke-width: .9px; }
+.l--bahn { stroke-width: 2.4px; }
+.l--blech { stroke-width: 2px; }
+.l--punkt { stroke-width: 2.2px; }
+.l--pflanze { stroke-width: 1.1px; }
+.f { fill: currentColor; fill-opacity: .1; }
+.f--ziegel { fill-opacity: .26; }
+.f--glas { fill-opacity: .16; }
+.f--voll { fill-opacity: .85; }
+.papier { fill: var(--zeichnung-grund, var(--papier)); }
+.etikett-svg { font: 600 22px/1 var(--schrift); letter-spacing: .14em; text-transform: uppercase; fill: var(--bestand); }
+.nummer__kreis { fill: var(--zeichnung-grund, var(--papier)); stroke: currentColor; stroke-width: 1.6px; vector-effect: non-scaling-stroke; }
+.nummer__text { font: 700 23px/1 var(--titel); fill: currentColor; text-anchor: middle; }
+
+.schicht { color: var(--schicht-standard, var(--tusche)); transition: color .45s var(--ease), opacity .55s var(--ease), transform .7s var(--ease); }
+.schicht--bestand  { color: var(--farbe-bestand, var(--bestand)); }
+.schicht--daemmung { color: var(--farbe-daemmung, var(--schicht-standard, var(--tusche))); }
+.schicht--lattung  { color: var(--farbe-lattung, var(--schicht-standard, var(--tusche))); }
+.schicht--ziegel   { color: var(--farbe-ziegel, var(--schicht-standard, var(--tusche))); }
+.schicht--fenster  { color: var(--farbe-fenster, var(--schicht-standard, var(--tusche))); }
+.schicht--spengler { color: var(--farbe-spengler, var(--schicht-standard, var(--tusche))); }
+.schicht--flach    { color: var(--farbe-flach, var(--schicht-standard, var(--tusche))); }
+.schicht--gruen    { color: var(--farbe-gruen, var(--schicht-standard, var(--tusche))); }
+.schicht--terrasse { color: var(--farbe-terrasse, var(--schicht-standard, var(--tusche))); }
+.schicht--wartung  { color: var(--farbe-wartung, var(--schicht-standard, var(--tusche))); }
+
+/* Aufbau beim Laden: erst der Rohbau von unten nach oben, dann Schicht um Schicht */
+.schnitt-held.baut-auf { --schicht-auftritt: schicht-rein .8s var(--ease) both; animation: rohbau 1.1s var(--ease) both; }
+.schicht:not(.schicht--bestand) { animation: var(--schicht-auftritt, none); animation-delay: calc(var(--i, 0) * 150ms + 650ms); }
+@keyframes rohbau { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(-5% -5% -5% -5%); } }
+@keyframes schicht-rein { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .schnitt-held.baut-auf { animation: none; --schicht-auftritt: none; }
+  .schicht { transition: none; }
+}
+
+/* =========================================================
+   Abschnitte allgemein
+   ========================================================= */
+.abschnitt { padding-block: clamp(4rem, 2.5rem + 6vw, 7.5rem); }
+.abschnitt--papier2 { background: var(--papier-2); }
+.abschnitt--nacht { background: var(--nacht); color: #fff; }
+.abschnitt--nacht .etikett { color: rgba(255,255,255,.7); }
+.kopfzeile { max-width: 46rem; margin-bottom: clamp(2.2rem, 1.5rem + 2vw, 3.5rem); }
+.kopfzeile h2 { font-size: clamp(2.2rem, 1.4rem + 3vw, 3.9rem); margin-top: .9rem; }
+.kopfzeile p { margin-top: 1.1rem; font-size: 1.1875rem; color: var(--grau); }
+.abschnitt--nacht .kopfzeile p { color: rgba(255,255,255,.78); }
+
+.reveal-on .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.reveal-on .reveal.is-in { opacity: 1; transform: none; }
+
+/* =========================================================
+   Schicht für Schicht (Traufdetail)
+   Ohne JavaScript, am Handy und bei wenig Höhe: Zeichnung komplett,
+   Schritte als Liste darunter. Erst .aufbau-an am <html> macht daraus
+   den klebenden Abschnitt.
+   ========================================================= */
+.aufbau__in { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+.aufbau__zeichnung { --zeichnung-grund: var(--papier-2); }
+.aufbau .zeichnung .schicht { color: var(--tusche); }
+.aufbau .zeichnung .schicht--bestand { color: var(--bestand); }
+
+.schritte { list-style: none; margin: 0; padding: 0; counter-reset: schritt; position: relative; }
+.schritt { display: grid; grid-template-columns: 2.6rem 1fr; gap: 0 1rem; padding: 1.1rem 0; border-top: 1px solid var(--haar); }
+.schritt:last-child { border-bottom: 1px solid var(--haar); }
+.schritt__nr {
+  display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 50%;
+  border: 1.6px solid currentColor; font: 700 1.1rem/1 var(--titel);
+  transition: background-color .35s var(--ease), color .35s var(--ease), border-color .35s var(--ease);
+}
+.schritt h3 { font-size: 1.55rem; line-height: 1.1; align-self: center; }
+.schritt__text { grid-column: 2; margin-top: .35rem; color: var(--grau); }
+.schritt__leistung { grid-column: 2; margin-top: .45rem; font-size: .9375rem; font-weight: 600; color: var(--rot); }
+
+.aufbau-an .aufbau { height: 470vh; padding-block: 0; }
+.aufbau-an .aufbau__buehne {
+  position: sticky; top: var(--kopf-h); height: calc(100vh - var(--kopf-h)); height: calc(100svh - var(--kopf-h));
+  display: flex; align-items: center;
+}
+.aufbau-an .aufbau__buehne > .shell { width: 100%; }
+.aufbau-an .aufbau .kopfzeile { margin-bottom: 1.6rem; }
+.aufbau-an .aufbau .kopfzeile h2 { font-size: clamp(2rem, 1rem + 2.4vw, 3.3rem); }
+.aufbau-an .aufbau .kopfzeile p { font-size: 1.0625rem; }
+.aufbau-an .aufbau__zeichnung .zeichnung { max-height: calc(100svh - var(--kopf-h) - 5rem); }
+.aufbau-an .schritt { padding: .7rem 0; cursor: pointer; }
+.aufbau-an .schritt h3 { font-size: 1.35rem; color: var(--grau); transition: color .35s var(--ease); }
+.aufbau-an .schritt__nr { color: var(--bestand); }
+.aufbau-an .schritt__text, .aufbau-an .schritt__leistung {
+  max-height: 0; margin-top: 0; opacity: 0; overflow: hidden;
+  transition: max-height .5s var(--ease), opacity .4s var(--ease), margin-top .5s var(--ease);
+}
+.aufbau-an .schritt.is-fertig .schritt__nr { color: var(--tusche); }
+.aufbau-an .schritt.is-fertig h3 { color: var(--tusche); }
+.aufbau-an .schritt.is-aktiv h3 { color: var(--tusche); }
+.aufbau-an .schritt.is-aktiv .schritt__nr { background: var(--rot); border-color: var(--rot); color: #fff; }
+.aufbau-an .schritt.is-aktiv .schritt__text { max-height: 9em; opacity: 1; margin-top: .35rem; }
+.aufbau-an .schritt.is-aktiv .schritt__leistung { max-height: 3em; opacity: 1; margin-top: .45rem; }
+
+.aufbau-an .aufbau .traufe-1, .aufbau-an .aufbau .traufe-2, .aufbau-an .aufbau .traufe-3,
+.aufbau-an .aufbau .traufe-4, .aufbau-an .aufbau .traufe-5 { opacity: 0; transform: translate(-22px, -32px); }
+.aufbau-an .aufbau .traufe-1 { transform: translate(22px, 32px); }
+.aufbau-an .aufbau.ab-1 .traufe-1, .aufbau-an .aufbau.ab-2 .traufe-2, .aufbau-an .aufbau.ab-3 .traufe-3,
+.aufbau-an .aufbau.ab-4 .traufe-4, .aufbau-an .aufbau.ab-5 .traufe-5 { opacity: 1; transform: none; }
+.aufbau-an .aufbau.aktiv-1 .traufe-1, .aufbau-an .aufbau.aktiv-2 .traufe-2, .aufbau-an .aufbau.aktiv-3 .traufe-3,
+.aufbau-an .aufbau.aktiv-4 .traufe-4, .aufbau-an .aufbau.aktiv-5 .traufe-5 { color: var(--rot); }
+
+/* Schmal: Überschrift, dann Zeichnung, dann die Schritte */
+@media (max-width: 1000px) {
+  .aufbau__in { grid-template-columns: 1fr; gap: 0; }
+  .aufbau__text { display: contents; }
+  .aufbau .kopfzeile { order: 1; margin-bottom: 1.5rem; }
+  .aufbau__zeichnung { order: 2; max-width: 620px; margin-bottom: 1.5rem; }
+  .schritte { order: 3; }
+}
+
+/* =========================================================
+   Leistungen
+   ========================================================= */
+.leistungen { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; list-style: none; margin: 0; padding: 0; }
+.leistung {
+  --schicht-standard: #b9bcc2; --farbe-bestand: #d3d4d7; --zeichnung-grund: var(--weiss);
+  display: flex; flex-direction: column;
+  background: var(--weiss); border: 1px solid var(--haar); border-radius: var(--radius); overflow: hidden;
+  transition: border-color .3s var(--ease), transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+.leistung:hover { border-color: #c4bdb0; transform: translateY(-3px); box-shadow: 0 14px 30px -18px rgba(26, 33, 48, .35); }
+.leistung__bild { aspect-ratio: 4 / 3; border-bottom: 1px solid var(--haar); background: var(--weiss); }
+.leistung__bild svg { width: 100%; height: 100%; }
+.leistung__text { padding: 1.1rem 1.2rem 1.35rem; }
+.leistung h3 { font-size: 1.5rem; }
+.leistung p { margin-top: .45rem; font-size: 1rem; color: var(--grau); }
+.leistung--steildach { --farbe-ziegel: var(--rot); --farbe-lattung: var(--tusche); }
+.leistung--daemmung  { --farbe-daemmung: var(--rot); }
+.leistung--fenster   { --farbe-fenster: var(--rot); }
+.leistung--flachdach { --farbe-flach: var(--rot); }
+.leistung--gruen     { --farbe-gruen: var(--rot); }
+.leistung--terrasse  { --farbe-terrasse: var(--rot); }
+.leistung--spengler  { --farbe-spengler: var(--rot); }
+.leistung--wartung   { --farbe-wartung: var(--rot); }
+.leistungen__fuss { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: center; justify-content: space-between; }
+.leistungen__fuss p { color: var(--grau); max-width: 44rem; }
+
+@media (max-width: 1060px) { .leistungen { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* Am Handy: Ausschnitt links, Text rechts, damit acht Karten nicht acht Bildschirme füllen */
+@media (max-width: 640px) {
+  .leistungen { grid-template-columns: 1fr; gap: .7rem; }
+  .leistung { flex-direction: row; }
+  .leistung:hover { transform: none; }
+  .leistung__bild { flex: 0 0 38%; aspect-ratio: auto; min-height: 7.5rem; border-bottom: 0; border-right: 1px solid var(--haar); }
+  .leistung__text { padding: .8rem .95rem .95rem; align-self: center; }
+  .leistung h3 { font-size: 1.3rem; }
+  .leistung p { font-size: .9375rem; line-height: 1.45; margin-top: .3rem; }
+}
+
+/* =========================================================
+   Preisschätzung
+   ========================================================= */
+.preis__in { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+.preis .kopfzeile { margin-bottom: 0; }
+.preis__karte { background: var(--nacht-2); border: 1px solid rgba(255,255,255,.12); border-radius: calc(var(--radius) + 4px); padding: clamp(1.4rem, 1rem + 2vw, 2.4rem); }
+.preis__schritte { list-style: none; margin: 0 0 1.8rem; padding: 0; counter-reset: p; }
+.preis__schritte li { counter-increment: p; display: grid; grid-template-columns: 2.4rem 1fr; gap: 1rem; align-items: start; padding: .8rem 0; border-bottom: 1px solid rgba(255,255,255,.12); }
+.preis__schritte li::before {
+  content: counter(p); display: grid; place-items: center; width: 2.2rem; height: 2.2rem; border-radius: 50%;
+  border: 1.6px solid rgba(255,255,255,.5); font: 700 1.05rem/1 var(--titel);
+}
+.preis__schritte b { display: block; font: 700 1.3rem/1.15 var(--titel); }
+.preis__schritte span { color: rgba(255,255,255,.72); font-size: .9875rem; }
+.preis__hinweis { margin-top: 1rem; font-size: .875rem; color: rgba(255,255,255,.62); }
+.preis__hinweis a { color: #fff; }
+@media (max-width: 900px) { .preis__in { grid-template-columns: 1fr; } }
+
+.rechner { width: min(1100px, 100vw - 2rem); height: min(760px, 100vh - 2rem); padding: 0; border: 0; border-radius: var(--radius); background: #fff; overflow: hidden; }
+.rechner::backdrop { background: rgba(19, 27, 56, .72); }
+.rechner__kopf { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .6rem .6rem .6rem 1.2rem; border-bottom: 1px solid var(--haar); }
+.rechner__kopf b { font: 700 1.2rem/1 var(--titel); }
+.rechner__zu { width: 2.9rem; height: 2.9rem; border: 0; border-radius: 50%; background: var(--papier-2); cursor: pointer; display: grid; place-items: center; }
+.rechner__zu:hover { background: var(--haar); }
+.rechner iframe { display: block; width: 100%; height: calc(100% - 4.1rem); border: 0; }
+@media (max-width: 700px) {
+  .rechner { width: 100vw; height: 100vh; height: 100dvh; max-width: none; max-height: none; border-radius: 0; }
+}
+
+/* =========================================================
+   Betrieb
+   ========================================================= */
+.betrieb__in { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+.betrieb__text > p { font-size: 1.1875rem; color: var(--grau); }
+.betrieb__text > p + p { margin-top: 1rem; }
+.zeitleiste { list-style: none; margin: 2.4rem 0 0; padding: 0; position: relative; }
+.zeitleiste::before { content: ""; position: absolute; left: 4.6rem; top: .6rem; bottom: .6rem; width: 2px; background: var(--haar); }
+.zeitleiste li { position: relative; display: grid; grid-template-columns: 4rem 1fr; gap: 1.6rem; padding: .85rem 0; }
+.zeitleiste li::after { content: ""; position: absolute; left: 4.35rem; top: 1.25rem; width: .7rem; height: .7rem; border-radius: 50%; background: var(--papier); border: 2px solid var(--tusche); }
+.zeitleiste li:last-child::after { background: var(--rot-logo); border-color: var(--rot-logo); }
+.zeitleiste b { font: 700 1.5rem/1.1 var(--titel); }
+.zeitleiste h3 { font-size: 1.3rem; }
+.zeitleiste p { margin-top: .2rem; color: var(--grau); }
+
+.foto { margin: 0; }
+.foto__rahmen { border-radius: var(--radius); overflow: hidden; background: var(--papier-2); aspect-ratio: 16 / 9; }
+.foto__rahmen img { width: 100%; height: 100%; object-fit: cover; }
+.foto figcaption { margin-top: .6rem; font-size: .9375rem; color: var(--grau); }
+.betrieb__seite { display: grid; gap: 1.6rem; }
+.insta {
+  display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.2rem; border-radius: var(--radius);
+  border: 1px solid var(--haar); background: var(--weiss); text-decoration: none;
+  transition: border-color .25s var(--ease);
+}
+.insta:hover { border-color: var(--tusche); }
+.insta__kreis { display: grid; place-items: center; width: 2.9rem; height: 2.9rem; border-radius: 50%; background: var(--nacht); color: #fff; flex: none; }
+.insta b { display: block; font: 700 1.2rem/1.1 var(--titel); color: var(--tusche); }
+.insta > span:last-child > span { display: block; color: var(--grau); font-size: .9375rem; }
+.material { margin-top: 1.4rem; padding-top: 1.2rem; border-top: 1px solid var(--haar); font-size: .9875rem; color: var(--grau); }
+.material b { color: var(--tusche); font-weight: 600; }
+@media (max-width: 900px) { .betrieb__in { grid-template-columns: 1fr; } }
+
+/* =========================================================
+   Karriere-Band auf der Startseite
+   ========================================================= */
+.karriere-band { display: grid; grid-template-columns: 1fr auto; gap: 1.5rem 3rem; align-items: center; padding: clamp(1.6rem, 1rem + 3vw, 3rem); border-radius: calc(var(--radius) + 6px); background: var(--weiss); border: 1px solid var(--haar); }
+.karriere-band h2 { font-size: clamp(2rem, 1.3rem + 2.6vw, 3.2rem); margin-top: .8rem; }
+.karriere-band p { margin-top: .8rem; color: var(--grau); max-width: 40rem; font-size: 1.125rem; }
+@media (max-width: 760px) { .karriere-band { grid-template-columns: 1fr; } }
+
+/* =========================================================
+   Kontakt und Formulare
+   ========================================================= */
+.kontakt__in { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
+@media (max-width: 900px) { .kontakt__in { grid-template-columns: 1fr; } }
+
+.form { display: grid; gap: 1.1rem; color: var(--tusche); background: var(--weiss); border: 1px solid var(--haar); border-radius: calc(var(--radius) + 4px); padding: clamp(1.2rem, .8rem + 2vw, 2.2rem); }
+.form__reihe { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+@media (max-width: 560px) { .form__reihe { grid-template-columns: 1fr; } }
+.form label:not(.form__haken) { display: block; margin-bottom: .35rem; font-weight: 600; font-size: .9875rem; }
+.form input:not([type="checkbox"]), .form select, .form textarea {
+  width: 100%; min-height: 3.1rem; padding: .7rem .9rem;
+  font: 400 16px/1.4 var(--schrift); color: var(--tusche);
+  background: var(--papier); border: 1.5px solid #cfc8bc; border-radius: 10px;
+  transition: border-color .2s, background-color .2s;
+}
+.form textarea { min-height: 8.5rem; resize: vertical; }
+.form input:focus, .form select:focus, .form textarea:focus { outline: none; border-color: var(--tusche); background: #fff; }
+.form .is-invalid { border-color: var(--rot) !important; background: #fff4f2 !important; }
+.form .form__haken { display: grid; grid-template-columns: 1.5rem 1fr; gap: .7rem; align-items: start; font-size: .9375rem; color: var(--grau); font-weight: 400; cursor: pointer; min-height: 44px; }
+.form__haken input { width: 1.35rem; height: 1.35rem; margin: .1rem 0 0; accent-color: var(--rot); }
+.form__haken input.is-invalid { outline: 2px solid var(--rot); outline-offset: 2px; }
+.form__knoepfe { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; }
+.form__notiz { min-height: 1.4em; font-size: .9375rem; }
+.form__notiz.is-error { color: var(--rot); }
+.form__notiz.is-ok { color: #1f6b3a; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.karte-kontakt { background: var(--nacht); color: #fff; border-radius: calc(var(--radius) + 4px); padding: clamp(1.4rem, 1rem + 2vw, 2.2rem); }
+.karte-kontakt h3 { font-size: 1.7rem; }
+.kontaktliste { list-style: none; margin: 1.2rem 0 0; padding: 0; }
+.kontaktliste li { display: grid; grid-template-columns: 2.6rem 1fr; gap: .8rem; align-items: center; padding: .8rem 0; border-top: 1px solid rgba(255,255,255,.14); }
+.kontaktliste .ico-kreis { display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 50%; background: rgba(255,255,255,.1); }
+.kontaktliste small { display: block; color: rgba(255,255,255,.62); font-size: .8125rem; letter-spacing: .08em; text-transform: uppercase; }
+.kontaktliste a { color: #fff; text-decoration: none; font-weight: 600; font-size: 1.125rem; display: inline-block; min-height: 44px; line-height: 44px; margin-block: -10px; }
+.kontaktliste a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.karte-kontakt__notiz { margin-top: 1.2rem; font-size: .9375rem; color: rgba(255,255,255,.72); }
+
+/* =========================================================
+   Karriere-Seite
+   ========================================================= */
+.karriere-held { padding-block: clamp(2.5rem, 1.5rem + 4vw, 5rem) clamp(2.5rem, 1.5rem + 3vw, 4rem); }
+.karriere-held__in { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(2rem, 5vw, 5rem); align-items: end; }
+.karriere-held h1 { font-size: clamp(2.8rem, 1.6rem + 4.4vw, 5.2rem); margin-top: 1rem; line-height: .97; }
+.karriere-held p { margin-top: 1.3rem; font-size: clamp(1.1rem, 1rem + .35vw, 1.3rem); color: var(--grau); max-width: 38rem; }
+.karriere-held .held__knoepfe { margin-top: 1.8rem; }
+.karriere-held__zeichnung { --schicht-standard: #b9bcc2; --farbe-bestand: #cfd0d4; --farbe-wartung: var(--rot); }
+@media (max-width: 900px) { .karriere-held__in { grid-template-columns: 1fr; } }
+
+.aufgaben { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; list-style: none; margin: 0; padding: 0; }
+.aufgaben li { background: var(--weiss); border: 1px solid var(--haar); border-radius: var(--radius); padding: 1.3rem 1.3rem 1.5rem; }
+.aufgaben b { display: block; font: 700 1.45rem/1.1 var(--titel); }
+.aufgaben span { display: block; margin-top: .45rem; color: var(--grau); }
+@media (max-width: 860px) { .aufgaben { grid-template-columns: 1fr; } }
+
+.ablauf { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: a; }
+.ablauf li { counter-increment: a; display: grid; grid-template-columns: 3rem 1fr; gap: 1rem; padding: 1rem 0; border-top: 1px solid rgba(255,255,255,.14); }
+.ablauf li::before { content: counter(a); display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: 50%; background: var(--rot); color: #fff; font: 700 1.1rem/1 var(--titel); }
+.ablauf b { display: block; font: 700 1.35rem/1.15 var(--titel); }
+.ablauf span { color: rgba(255,255,255,.72); }
+
+/* =========================================================
+   Rechtliches
+   ========================================================= */
+.recht { padding-block: clamp(2.5rem, 1.5rem + 4vw, 5rem); }
+.recht h1 { font-size: clamp(2.6rem, 1.6rem + 3.6vw, 4.4rem); margin: .9rem 0 2rem; }
+.recht h2 { font-size: 1.75rem; margin: 2.4rem 0 .7rem; }
+.recht p, .recht ul, .recht address { color: #3a404c; }
+.recht p + p { margin-top: .8rem; }
+.recht ul { padding-left: 1.2rem; margin: .6rem 0; }
+.recht a { text-underline-offset: 3px; }
+.offen { background: #fff0b8; padding: .05rem .35rem; border-radius: 4px; }
+.zurueck { display: inline-flex; margin-top: 3rem; font-weight: 600; min-height: 44px; align-items: center; }
+
+/* =========================================================
+   Fußzeile und Anrufleiste
+   ========================================================= */
+.fuss { background: var(--nacht); color: rgba(255,255,255,.78); padding-block: clamp(3rem, 2rem + 3vw, 4.5rem) 1.5rem; }
+.fuss__raster { display: grid; grid-template-columns: minmax(0, 5fr) repeat(3, minmax(0, 2fr)); gap: 2rem; }
+.fuss__marke img { width: 13rem; height: auto; }
+.fuss__marke p { margin-top: 1rem; max-width: 22rem; }
+.fuss h4 { font: 600 .8125rem/1 var(--schrift); letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.55); margin-bottom: .9rem; }
+.fuss ul { list-style: none; margin: 0; padding: 0; }
+.fuss li + li { margin-top: .15rem; }
+.fuss a { color: #fff; text-decoration: none; display: inline-block; min-height: 44px; line-height: 44px; }
+.fuss a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.fuss__unten { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; justify-content: space-between; align-items: center; margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,.14); font-size: .9375rem; }
+.fuss__unten nav { display: flex; gap: 1.4rem; }
+@media (max-width: 900px) { .fuss__raster { grid-template-columns: 1fr 1fr; } .fuss__marke { grid-column: 1 / -1; } }
+@media (max-width: 480px) { .fuss__raster { grid-template-columns: 1fr; } }
+
+.anrufleiste { display: none; }
+@media (max-width: 760px) {
+  body.hat-leiste { padding-bottom: calc(4.4rem + env(safe-area-inset-bottom)); }
+  .anrufleiste {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--nacht); border-top: 1px solid rgba(255,255,255,.1);
+  }
+  .anrufleiste a {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .2rem;
+    min-height: 4.4rem; color: #fff; text-decoration: none; font-weight: 600; font-size: .9375rem;
+  }
+  .anrufleiste a + a { border-left: 1px solid rgba(255,255,255,.1); }
+  .anrufleiste .anrufleiste__rot { background: var(--rot); }
+  .anrufleiste .ico { width: 1.3rem; height: 1.3rem; }
+}

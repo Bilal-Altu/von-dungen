@@ -1,0 +1,10 @@
+# Editor- und Systemreste
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Nur für die lokalen Screenshots (Desktop\von Dungen\werkzeug\schirm)
+_*.html
+
+# Nur für die lokale Vorschau
+.claude/

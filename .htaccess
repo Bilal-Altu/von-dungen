@@ -1,0 +1,67 @@
+# =========================================================
+# von Dungen — Serverkonfiguration für ALL-INKL (Apache)
+#
+# Diese Datei wird von GitHub Pages ignoriert und wirkt erst,
+# sobald die Seite per FTP auf dem Webspace liegt.
+# =========================================================
+
+# Verzeichnisse ohne index.html sollen keine Dateiliste ausgeben.
+Options -Indexes
+AddDefaultCharset UTF-8
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Eine Adresse für alles: https und ohne www, so wie vondungen-dach.de bisher verlinkt ist.
+  # Beide Bedingungen in einer Regel, damit es nur einen Sprung gibt.
+  # TODO Bilal: Vor dem Umzug prüfen, dass im KAS das Zertifikat für beide Varianten aktiv ist.
+  RewriteCond %{HTTPS} !=on [OR]
+  RewriteCond %{HTTP_HOST} ^www\. [NC]
+  RewriteRule ^ https://vondungen-dach.de%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ---------------------------------------------------------
+# Komprimierung — spart auf der Baustelle mit schlechtem Netz
+# spürbar Ladezeit. Bilder und woff2 sind bereits komprimiert
+# und werden bewusst ausgelassen.
+# ---------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ---------------------------------------------------------
+# Wie lange der Browser Dateien behalten darf.
+# HTML absichtlich 0 Sekunden: Sonst sieht ein Besucher nach einer
+# Textänderung tagelang die alte Fassung. CSS, JS und Bilder dürfen
+# dagegen lange liegen bleiben.
+# ---------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html                 "access plus 0 seconds"
+  # CSS und JS einen Monat: Das geht nur gut, weil die HTML-Seiten sie mit
+  # ?v=... einbinden. Nach jeder Änderung an style.css oder main.js die Zahl
+  # in allen vier HTML-Seiten hochzählen, sonst sehen Besucher neues HTML
+  # mit altem Stylesheet.
+  ExpiresByType text/css                  "access plus 1 month"
+  ExpiresByType application/javascript    "access plus 1 month"
+  ExpiresByType image/jpeg                "access plus 1 year"
+  ExpiresByType image/png                 "access plus 1 year"
+  ExpiresByType image/webp                "access plus 1 year"
+  ExpiresByType image/avif                "access plus 1 year"
+  ExpiresByType image/svg+xml             "access plus 1 year"
+  ExpiresByType font/woff2                "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Verhindert, dass der Browser eine Datei anders interpretiert,
+  # als der Server sie deklariert hat.
+  Header set X-Content-Type-Options "nosniff"
+  # Beim Klick auf einen externen Link wird nur die Domain übergeben,
+  # nicht die vollständige Adresse der Unterseite.
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  # Die Seite darf nicht in einem fremden Rahmen eingebettet werden.
+  Header always set X-Frame-Options "SAMEORIGIN"
+</IfModule>

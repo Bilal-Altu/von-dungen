@@ -1,0 +1,5 @@
+# Entwurf zur Vorschau. Beim Umzug auf vondungen-dach.de die Sitemap-Adresse anpassen.
+User-agent: *
+Allow: /
+
+Sitemap: https://vondungen-dach.de/sitemap.xml
