@@ -189,12 +189,24 @@ address { font-style: normal; }
 .held__knoepfe { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.5rem; }
 
 .held__zeichnung { margin: clamp(1.2rem, 3vw, 2.8rem) 0 0; }
-.held__fuss { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 1rem 2rem; margin-top: 1.2rem; padding-top: 1.1rem; border-top: 1px solid var(--haar); }
-.held__fakten { display: grid; grid-template-columns: repeat(3, auto); gap: .6rem clamp(1.4rem, 4vw, 3.5rem); margin: 0; padding: 0; list-style: none; }
-.held__fakten li { display: flex; flex-direction: column; }
-.held__fakten b { font: 700 clamp(1.6rem, 1.2rem + 1vw, 2.2rem)/1 var(--titel); }
-.held__fakten span { font-size: .9375rem; color: var(--grau); }
+.held__fuss { display: flex; justify-content: flex-end; margin-top: .6rem; }
 .held__bildtext { font-size: .875rem; color: var(--grau); }
+
+/* Großer Bildschirm: Der ganze Hero passt beim Öffnen ins Fenster. Die Zeichnung nimmt
+   die Höhe, die unter Überschrift und Knöpfen übrig bleibt, und skaliert darin mit.
+   Vorher lag bei 1900 × 910 der untere Teil des Hauses unter dem Bildrand. */
+@media (min-width: 901px) and (min-height: 560px) {
+  .held {
+    display: flex; flex-direction: column;
+    height: calc(100vh - var(--kopf-h)); height: calc(100svh - var(--kopf-h));
+    min-height: 540px; max-height: 1100px;
+    padding-block: clamp(1rem, 3.2vh, 3rem) clamp(.8rem, 2.4vh, 2rem);
+  }
+  .held > .shell { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .held h1 { font-size: min(clamp(3rem, 1.4rem + 5.6vw, 6.4rem), 10.5vh); }
+  .held__zeichnung { flex: 1; min-height: 0; display: flex; flex-direction: column; margin-top: clamp(.6rem, 3vh, 2.4rem); }
+  .held__zeichnung .schnitt-held { flex: 1 1 0; min-height: 0; width: 100%; height: auto; }
+}
 
 @media (max-width: 900px) {
   .held__kopf { grid-template-columns: 1fr; }
@@ -202,8 +214,6 @@ address { font-style: normal; }
   .held__fuss { margin-inline: calc(var(--rand) * .5); }
 }
 @media (max-width: 480px) {
-  .held__fakten { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem 1rem; }
-  .held__fakten span { font-size: .8125rem; line-height: 1.3; }
 }
 
 /* =========================================================
@@ -305,7 +315,6 @@ address { font-style: normal; }
    zugeklappten Zustand ein Streifen Text sichtbar */
 .schritt__inhalt > div > :last-child { margin-bottom: 1.1rem; }
 .schritt__text { color: var(--grau); }
-.schritt__leistung { display: inline-block; margin-top: .4rem; font-size: .9375rem; font-weight: 600; color: var(--blau); }
 .aufbau__steuerung { display: flex; align-items: center; gap: .8rem; margin-top: 1.4rem; }
 .aufbau__stand { margin-right: auto; font-size: .9375rem; color: var(--grau); font-variant-numeric: tabular-nums; }
 
@@ -367,8 +376,6 @@ address { font-style: normal; }
 .leistung--terrasse  { --farbe-terrasse: var(--rot); }
 .leistung--spengler  { --farbe-spengler: var(--rot); }
 .leistung--wartung   { --farbe-wartung: var(--rot); }
-.leistungen__fuss { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 1rem 2rem; align-items: center; justify-content: space-between; }
-.leistungen__fuss p { color: var(--grau); max-width: 44rem; }
 
 @media (max-width: 1060px) { .leistungen { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .leistungen__wisch { display: none; }
@@ -389,7 +396,6 @@ address { font-style: normal; }
   .leistungen__wisch { display: flex; align-items: center; gap: .9rem; margin-top: .9rem; font-size: .875rem; color: var(--grau); font-variant-numeric: tabular-nums; }
   .leistungen__balken { position: relative; flex: 1; height: 3px; border-radius: 3px; background: var(--haar); overflow: hidden; }
   .leistungen__balken span { position: absolute; left: 0; top: 0; bottom: 0; width: 12.5%; border-radius: 3px; background: var(--blau); transform: translateX(var(--wisch, 0%)); transition: transform .15s linear; }
-  .leistungen__fuss { margin-top: 1.4rem; }
 }
 
 /* =========================================================
@@ -540,9 +546,8 @@ address { font-style: normal; }
    Fußzeile und Anrufleiste
    ========================================================= */
 .fuss { --ueberschrift: #fff; background: var(--nacht); color: rgba(255,255,255,.78); padding-block: clamp(3rem, 2rem + 3vw, 4.5rem) 1.5rem; }
-.fuss__raster { display: grid; grid-template-columns: minmax(0, 5fr) repeat(3, minmax(0, 2fr)); gap: 2rem; }
+.fuss__raster { display: grid; grid-template-columns: minmax(0, 6fr) repeat(2, minmax(0, 2fr)); gap: 2rem; }
 .fuss__marke img { width: 13rem; height: auto; }
-.fuss__marke p { margin-top: 1rem; max-width: 22rem; }
 .fuss h4 { font: 600 .8125rem/1 var(--schrift); letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.55); margin-bottom: .9rem; }
 .fuss ul { list-style: none; margin: 0; padding: 0; }
 .fuss li + li { margin-top: .15rem; }
@@ -594,11 +599,11 @@ address { font-style: normal; }
   .held { padding-block: 1.4rem 2.2rem; }
   .held h1 { font-size: 3.5rem; }
   .held__lead { font-size: 1.1rem; margin-top: 1rem; }
-  .held__knoepfe { margin-top: 1.2rem; }
-  .held__knoepfe .btn { flex: 1 1 auto; }
+  /* Preis und Anfrage stehen am Handy schon in der Anrufleiste unten */
+  .held__knoepfe { display: none; }
   .held__zeichnung { margin: 1.4rem calc(var(--rand) * -1) 0; overflow: hidden; }
   .held__zeichnung .schnitt-held { width: 124%; max-width: none; margin-left: -9%; }
-  .held__fuss { margin: .6rem var(--rand) 0; padding-top: .9rem; }
+  .held__fuss { display: none; }
   .held__bildtext { display: none; }
 
   /* Dachaufbau: Zeichnung, darunter Punkte und Pfeile, darunter nur die gewählte
@@ -643,10 +648,6 @@ address { font-style: normal; }
   .fuss__raster { grid-template-columns: 1fr 1fr; gap: 1.2rem 1rem; }
   .fuss__marke { grid-column: 1 / -1; }
   .fuss__marke img { width: 10rem; }
-  /* Seite und Folgen nebeneinander, Kontakt darunter über die ganze Breite (E-Mail bricht sonst um) */
-  .fuss__raster > div:nth-child(2) { order: 1; }
-  .fuss__raster > div:nth-child(4) { order: 2; }
-  .fuss__raster > div:nth-child(3) { order: 3; grid-column: 1 / -1; }
   .fuss li + li { margin-top: 0; }
   .fuss__unten { margin-top: 1.4rem; }
 }
