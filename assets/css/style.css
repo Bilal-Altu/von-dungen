@@ -231,6 +231,7 @@ address { font-style: normal; }
   vector-effect: non-scaling-stroke; stroke-linejoin: round; stroke-linecap: round;
 }
 .l--fein { stroke-width: .8px; }
+.l--ansicht { stroke-opacity: .7; }   /* hinter der Schnittebene */
 .l--boden { stroke-width: 2px; }
 .l--daemm { stroke-width: .9px; }
 .l--strich { stroke-dasharray: 5 4; stroke-width: .9px; }
