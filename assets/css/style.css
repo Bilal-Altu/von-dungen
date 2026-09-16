@@ -515,7 +515,7 @@ address { font-style: normal; }
 .karriere-held h1 { font-size: clamp(2.8rem, 1.6rem + 4.4vw, 5.2rem); margin-top: 1rem; line-height: .97; }
 .karriere-held p { margin-top: 1.3rem; font-size: clamp(1.1rem, 1rem + .35vw, 1.3rem); color: var(--grau); max-width: 38rem; }
 .karriere-held .held__knoepfe { margin-top: 1.8rem; }
-.karriere-held__zeichnung { --schicht-standard: #b3bad0; --farbe-bestand: #d2d7e4; --farbe-wartung: var(--rot); }
+.karriere-held__zeichnung { --schicht-standard: #b3bad0; --farbe-bestand: #d2d7e4; --farbe-ziegel: var(--rot); }
 @media (max-width: 900px) { .karriere-held__in { grid-template-columns: 1fr; } }
 
 .aufgaben { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; list-style: none; margin: 0; padding: 0; }
@@ -603,7 +603,7 @@ address { font-style: normal; }
   /* Preis und Anfrage stehen am Handy schon in der Anrufleiste unten */
   .held__knoepfe { display: none; }
   .held__zeichnung { margin: 1.4rem calc(var(--rand) * -1) 0; overflow: hidden; }
-  .held__zeichnung .schnitt-held { width: 124%; max-width: none; margin-left: -9%; }
+  .held__zeichnung .schnitt-held { width: 100%; }
   .held__fuss { display: none; }
   .held__bildtext { display: none; }
 
