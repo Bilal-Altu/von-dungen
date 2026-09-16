@@ -74,6 +74,8 @@
 
     html.classList.add("aufbau-js");
     if (steuerung) steuerung.hidden = false;
+    // Handy: Punkte statt Liste
+    var punkte = Array.prototype.slice.call(aufbau.querySelectorAll("[data-schicht-nr]"));
 
     var setzeSchritt = function (n) {
       aktuell = klemme(n, 1, ANZAHL);
@@ -85,6 +87,11 @@
         li.classList.toggle("is-aktiv", i + 1 === aktuell);
         li.classList.toggle("is-fertig", i + 1 < aktuell);
         li.querySelector(".schritt__knopf").setAttribute("aria-expanded", String(i + 1 === aktuell));
+      });
+      punkte.forEach(function (p, i) {
+        p.classList.toggle("is-aktiv", i + 1 === aktuell);
+        p.classList.toggle("is-fertig", i + 1 < aktuell);
+        p.setAttribute("aria-pressed", String(i + 1 === aktuell));
       });
       if (stand) stand.textContent = "Schicht " + aktuell + " von " + ANZAHL;
       if (zurueck) zurueck.disabled = aktuell === 1;
@@ -100,6 +107,9 @@
 
     schritte.forEach(function (li, i) {
       li.querySelector(".schritt__knopf").addEventListener("click", function () { uebernehmen(); setzeSchritt(i + 1); });
+    });
+    punkte.forEach(function (p, i) {
+      p.addEventListener("click", function () { uebernehmen(); setzeSchritt(i + 1); });
     });
     if (zurueck) zurueck.addEventListener("click", function () { uebernehmen(); setzeSchritt(aktuell - 1); });
     if (weiter) weiter.addEventListener("click", function () { uebernehmen(); setzeSchritt(aktuell + 1); });
@@ -123,11 +133,55 @@
     }
   }
 
-  /* ---------- Kopfleiste: Linie beim Scrollen ---------- */
+  /* ---------- Kopfleiste beim Scrollen ----------
+     Überall: feine Linie, sobald gescrollt wird. Am Handy zusätzlich: Beim
+     Runterscrollen fährt die Leiste weg, beim Hochscrollen kommt sie wieder.
+     Unten steht dort ohnehin die Anrufleiste; zusammen nahmen beide sonst ein
+     Sechstel des Bildschirms. Bei offenem Menü bleibt sie stehen. */
   var navLinks = nav ? Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]')) : [];
-  function kopfLinie() { if (kopf) kopf.classList.toggle("is-stuck", window.scrollY > 8); }
-  window.addEventListener("scroll", kopfLinie, { passive: true });
-  kopfLinie();
+  var handy = window.matchMedia("(max-width: 760px)");
+  var letzteY = window.scrollY;
+  function kopfBeimScrollen() {
+    if (!kopf) return;
+    var y = window.scrollY;
+    kopf.classList.toggle("is-stuck", y > 8);
+    if (!handy.matches || document.body.classList.contains("nav-open") || y <= 160) {
+      kopf.classList.remove("is-weg");
+      letzteY = y;
+      return;
+    }
+    // Erst ab 6 px Bewegung entscheiden, sonst flackert die Leiste beim Zittern des Daumens.
+    // letzteY bleibt bis dahin stehen, damit sich langsames Scrollen aufsummiert.
+    if (Math.abs(y - letzteY) < 6) return;
+    kopf.classList.toggle("is-weg", y > letzteY);
+    letzteY = y;
+  }
+  window.addEventListener("scroll", kopfBeimScrollen, { passive: true });
+  kopfBeimScrollen();
+  // Tastatur: Landet der Fokus in der Leiste, muss sie sichtbar sein
+  document.addEventListener("focusin", function (e) { if (kopf && kopf.contains(e.target)) kopf.classList.remove("is-weg"); });
+
+  /* ---------- Leistungen am Handy: Stand beim Wischen ---------- */
+  var reihe = document.querySelector(".leistungen");
+  var wischStand = document.querySelector("[data-wisch-stand]");
+  var wischBalken = document.querySelector(".leistungen__balken span");
+  if (reihe && wischStand && wischBalken) {
+    var karten = reihe.children.length;
+    var wischTakt = false;
+    var wischen = function () {
+      wischTakt = false;
+      var weg = reihe.scrollWidth - reihe.clientWidth;
+      if (weg <= 0) return;
+      var anteil = reihe.scrollLeft / weg;
+      wischBalken.style.setProperty("--wisch", (anteil * (karten - 1) * 100).toFixed(1) + "%");
+      wischStand.textContent = (Math.round(anteil * (karten - 1)) + 1) + " / " + karten;
+    };
+    reihe.addEventListener("scroll", function () {
+      if (wischTakt) return;
+      wischTakt = true;
+      window.requestAnimationFrame(wischen);
+    }, { passive: true });
+  }
 
   /* ---------- Aktiver Menüpunkt ---------- */
   if (hatIO && navLinks.length) {
@@ -142,8 +196,9 @@
   }
 
   /* ---------- Einblenden beim Scrollen ---------- */
+  // Am Handy nicht: Dort wirkte das Nachblenden beim schnellen Wischen träge.
   var reveals = document.querySelectorAll(".reveal");
-  if (reveals.length && !reduceMotion && hatIO) {
+  if (reveals.length && !reduceMotion && hatIO && !handy.matches) {
     // Das Verstecken schaltet dieselbe Stelle ein, die es wieder aufhebt.
     html.classList.add("reveal-on");
     var rio = new IntersectionObserver(function (eintraege, obs) {

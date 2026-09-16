@@ -27,7 +27,7 @@
 <link rel="preload" href="assets/fonts/barlow-semi-condensed-700.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="assets/fonts/barlow-400.woff2" as="font" type="font/woff2" crossorigin />
 <!-- ?v= nach jeder Änderung an style.css oder main.js in allen vier Seiten hochzählen -->
-<link rel="stylesheet" href="assets/css/style.css?v=2026-09-16-3" />
+<link rel="stylesheet" href="assets/css/style.css?v=2026-09-16-5" />
 </head>
 <body class="hat-leiste">
 
@@ -252,7 +252,16 @@
       <div class="aufbau__steuerung" hidden>
         <button class="btn btn--klein btn--linie" type="button" data-schicht="zurueck" aria-label="Vorige Schicht">&larr;</button>
         <span class="aufbau__stand" aria-live="polite">Schicht 1 von 5</span>
-        <button class="btn btn--klein btn--blau" type="button" data-schicht="weiter">Nächste Schicht &rarr;</button>
+        <!-- Nur am Handy sichtbar: Dort steht immer nur die gewählte Schicht unter der
+             Zeichnung, die Punkte ersetzen die Liste -->
+        <div class="aufbau__punkte" role="group" aria-label="Schicht wählen">
+          <button class="aufbau__punkt" type="button" data-schicht-nr="1" aria-label="Schicht 1: Dämmung und Dampfbremse">1</button>
+          <button class="aufbau__punkt" type="button" data-schicht-nr="2" aria-label="Schicht 2: Unterdeckbahn">2</button>
+          <button class="aufbau__punkt" type="button" data-schicht-nr="3" aria-label="Schicht 3: Konterlattung und Lattung">3</button>
+          <button class="aufbau__punkt" type="button" data-schicht-nr="4" aria-label="Schicht 4: Eindeckung">4</button>
+          <button class="aufbau__punkt" type="button" data-schicht-nr="5" aria-label="Schicht 5: Traufe und Rinne">5</button>
+        </div>
+        <button class="btn btn--klein btn--blau" type="button" data-schicht="weiter" aria-label="Nächste Schicht"><span class="nur-gross">Nächste Schicht&nbsp;</span>&rarr;</button>
       </div>
     </div>
   </div>
@@ -327,6 +336,12 @@
         </div>
       </li>
     </ul>
+    <!-- Nur am Handy: Stand beim Wischen durch die Karten -->
+    <div class="leistungen__wisch" aria-hidden="true">
+      <span data-wisch-stand>1 / 8</span>
+      <div class="leistungen__balken"><span></span></div>
+      <span>wischen</span>
+    </div>
 
     <div class="leistungen__fuss reveal">
       <p>Nicht sicher, was Ihr Dach braucht? Rufen Sie an oder schreiben Sie uns, wir beraten Sie gern.</p>
@@ -375,7 +390,7 @@
 </dialog>
 
 <!-- ============ BETRIEB ============ -->
-<section class="abschnitt" id="betrieb">
+<section class="abschnitt betrieb" id="betrieb">
   <div class="shell betrieb__in">
     <div class="betrieb__text">
       <header class="kopfzeile reveal" style="margin-bottom:1.4rem">
@@ -582,7 +597,7 @@
   </a>
 </nav>
 
-<script src="assets/js/main.js?v=2026-09-16-3"></script>
+<script src="assets/js/main.js?v=2026-09-16-5"></script>
 
 <!-- Bewusst ohne Öffnungszeiten, Geokoordinaten und Bewertungen: liegen nicht bestätigt vor. -->
 <script type="application/ld+json">

@@ -371,15 +371,25 @@ address { font-style: normal; }
 .leistungen__fuss p { color: var(--grau); max-width: 44rem; }
 
 @media (max-width: 1060px) { .leistungen { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-/* Am Handy: Ausschnitt links, Text rechts, damit acht Karten nicht acht Bildschirme füllen */
+.leistungen__wisch { display: none; }
+/* Am Handy: eine Reihe zum Wischen statt acht Karten untereinander (vorher gut 1100 px) */
 @media (max-width: 640px) {
-  .leistungen { grid-template-columns: 1fr; gap: .7rem; }
-  .leistung { flex-direction: row; }
-  .leistung:hover { transform: none; }
-  .leistung__bild { flex: 0 0 38%; aspect-ratio: auto; min-height: 7.5rem; border-bottom: 0; border-right: 1px solid var(--haar); }
-  .leistung__text { padding: .8rem .95rem .95rem; align-self: center; }
-  .leistung h3 { font-size: 1.3rem; }
-  .leistung p { font-size: .9375rem; line-height: 1.45; margin-top: .3rem; }
+  .leistungen {
+    display: flex; gap: .75rem; overflow-x: auto; overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory; scroll-padding-inline: var(--rand);
+    margin-inline: calc(var(--rand) * -1); padding: .2rem var(--rand) .4rem;
+    scrollbar-width: none;
+  }
+  .leistungen::-webkit-scrollbar { display: none; }
+  .leistung { flex: 0 0 80%; scroll-snap-align: start; }
+  .leistung:hover { transform: none; box-shadow: none; }
+  .leistung__text { padding: .9rem 1rem 1.1rem; }
+  .leistung h3 { font-size: 1.35rem; }
+  .leistung p { font-size: .9375rem; line-height: 1.45; }
+  .leistungen__wisch { display: flex; align-items: center; gap: .9rem; margin-top: .9rem; font-size: .875rem; color: var(--grau); font-variant-numeric: tabular-nums; }
+  .leistungen__balken { position: relative; flex: 1; height: 3px; border-radius: 3px; background: var(--haar); overflow: hidden; }
+  .leistungen__balken span { position: absolute; left: 0; top: 0; bottom: 0; width: 12.5%; border-radius: 3px; background: var(--blau); transform: translateX(var(--wisch, 0%)); transition: transform .15s linear; }
+  .leistungen__fuss { margin-top: 1.4rem; }
 }
 
 /* =========================================================
@@ -541,7 +551,6 @@ address { font-style: normal; }
 .fuss__unten { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; justify-content: space-between; align-items: center; margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,.14); font-size: .9375rem; }
 .fuss__unten nav { display: flex; gap: 1.4rem; }
 @media (max-width: 900px) { .fuss__raster { grid-template-columns: 1fr 1fr; } .fuss__marke { grid-column: 1 / -1; } }
-@media (max-width: 480px) { .fuss__raster { grid-template-columns: 1fr; } }
 
 .anrufleiste { display: none; }
 @media (max-width: 760px) {
@@ -559,4 +568,85 @@ address { font-style: normal; }
   .anrufleiste a + a { border-left: 1px solid rgba(255,255,255,.1); }
   .anrufleiste .anrufleiste__rot { background: var(--rot); }
   .anrufleiste .ico { width: 1.3rem; height: 1.3rem; }
+}
+
+
+/* =========================================================
+   Handy (bis 760 px)
+   Gemessen an 390 px Breite war die Startseite gut 10 000 px lang.
+   Ziel: kürzer, die Zeichnungen größer, das Wichtigste zuerst,
+   nichts, was sich erst beim Scrollen einblendet.
+   ========================================================= */
+.nur-gross { display: inline; }
+.aufbau__punkte { display: none; }
+
+@media (max-width: 760px) {
+  .abschnitt { padding-block: 3.25rem; }
+  .kopfzeile { margin-bottom: 1.6rem; }
+  .kopfzeile h2 { font-size: clamp(2.1rem, 1.5rem + 3vw, 2.6rem); }
+  .kopfzeile p { font-size: 1.0625rem; margin-top: .8rem; }
+
+  /* Kopfleiste verschwindet beim Runterscrollen, kommt beim Hochscrollen zurück */
+  .kopf { transition: transform .3s var(--ease); }
+  .kopf.is-weg { transform: translateY(-100%); }
+
+  /* Hero: Überschrift größer, Zeichnung randlos und etwas hineingezoomt */
+  .held { padding-block: 1.4rem 2.2rem; }
+  .held h1 { font-size: 3.5rem; }
+  .held__lead { font-size: 1.1rem; margin-top: 1rem; }
+  .held__knoepfe { margin-top: 1.2rem; }
+  .held__knoepfe .btn { flex: 1 1 auto; }
+  .held__zeichnung { margin: 1.4rem calc(var(--rand) * -1) 0; overflow: hidden; }
+  .held__zeichnung .schnitt-held { width: 124%; max-width: none; margin-left: -9%; }
+  .held__fuss { margin: .6rem var(--rand) 0; padding-top: .9rem; }
+  .held__bildtext { display: none; }
+
+  /* Dachaufbau: Zeichnung, darunter Punkte und Pfeile, darunter nur die gewählte
+     Schicht. So bleibt die Zeichnung beim Weitertippen im Bild. */
+  .aufbau-js .aufbau__steuerung { order: 3; margin: 0 0 1rem; gap: .5rem; }
+  .aufbau-js .aufbau__stand, .aufbau-js .nur-gross { display: none; }
+  .aufbau-js .aufbau__punkte { display: flex; gap: .4rem; margin-right: auto; }
+  .aufbau__punkt {
+    display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 50%;
+    border: 1.6px solid var(--bestand); background: none; color: var(--grau);
+    font: 700 1.05rem/1 var(--titel); cursor: pointer; padding: 0;
+  }
+  .aufbau__punkt.is-fertig { border-color: var(--blau); color: var(--blau); }
+  .aufbau__punkt.is-aktiv { border-color: var(--rot); background: var(--rot); color: #fff; }
+  .aufbau-js .aufbau__steuerung .btn--klein { width: 2.75rem; padding: 0; }
+  .aufbau-js .schritte { order: 4; }
+  .aufbau-js .schritt { display: none; border: 0; }
+  .aufbau-js .schritt.is-aktiv { display: block; }
+  .aufbau-js .schritt__knopf { min-height: 0; padding: 0 0 .4rem; pointer-events: none; font-size: 1.45rem; }
+  .aufbau-js .schritt__knopf .schritt__nr { display: none; }
+  .aufbau-js .schritt__inhalt > div { padding-left: 0; }
+  .aufbau-js .schritt__inhalt { transition: none; }
+  .aufbau__zeichnung { margin-inline: calc(var(--rand) * -.5); }
+
+  /* Betrieb: Foto nach oben, Instagram ans Ende */
+  .betrieb__in { display: flex; flex-direction: column; gap: 0; }
+  .betrieb__text, .betrieb__seite { display: contents; }
+  .betrieb__text .kopfzeile { order: 1; }
+  .betrieb .foto { order: 2; margin-bottom: 1.4rem; }
+  .betrieb__text > p { order: 3; font-size: 1.0625rem; }
+  .zeitleiste { order: 4; margin-top: 1.4rem; }
+  .betrieb__text > .material { order: 5; }
+  .insta { order: 6; margin-top: 1.4rem; }
+
+  /* Kontakt: erst anrufen/schreiben, dann das Formular */
+  .kontakt__in .karte-kontakt { order: -1; }
+
+  .karriere-band { padding: 1.4rem; }
+  .karriere-band .btn { width: 100%; }
+
+  .fuss { padding-block: 2.5rem 1.2rem; }
+  .fuss__raster { grid-template-columns: 1fr 1fr; gap: 1.2rem 1rem; }
+  .fuss__marke { grid-column: 1 / -1; }
+  .fuss__marke img { width: 10rem; }
+  /* Seite und Folgen nebeneinander, Kontakt darunter über die ganze Breite (E-Mail bricht sonst um) */
+  .fuss__raster > div:nth-child(2) { order: 1; }
+  .fuss__raster > div:nth-child(4) { order: 2; }
+  .fuss__raster > div:nth-child(3) { order: 3; grid-column: 1 / -1; }
+  .fuss li + li { margin-top: 0; }
+  .fuss__unten { margin-top: 1.4rem; }
 }
