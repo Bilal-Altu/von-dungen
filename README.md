@@ -54,7 +54,7 @@ Aufruf nichts von fremden Servern und braucht deshalb **kein Cookie-Banner**.
 Beide Zeichnungen sind reines SVG und werden per Skript erzeugt, nicht von Hand gezeichnet:
 
 ```
-node "C:\Users\bilal\Desktop\von Dungen\werkzeug\zeichnung\einsetzen.js" "C:\Users\bilal\Desktop\Claude Prompts\von-dungen"
+node "C:\Users\bilal\Desktop\von Dungen\werkzeug\zeichnung\einsetzen.js" "C:\Users\bilal\Desktop\sideTwo Projekte\Website Kunden\von-dungen\von-dungen"
 ```
 
 Das Skript setzt sie zwischen die Marker `<!-- SCHNITT:START -->` und `<!-- TRAUFE:START -->`
