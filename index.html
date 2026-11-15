@@ -439,7 +439,7 @@
 
     <div class="kontakt__in">
       <!-- Kein Server: main.js baut aus den Eingaben eine fertige E-Mail. -->
-      <form class="form reveal" id="anfrage" novalidate data-art="anfrage">
+      <form class="form reveal" id="anfrage" action="kontakt.php" method="post" novalidate data-art="anfrage">
         <div class="form__reihe">
           <div>
             <label for="f-name">Name *</label>
@@ -490,7 +490,7 @@
         <div class="form__knoepfe">
           <button class="btn btn--blau" type="submit">
             <svg class="ico" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2Zm0 2v.5l8 5 8-5V6H4Zm16 12V8.9l-7.5 4.7a1 1 0 0 1-1 0L4 8.9V18h16Z"/></svg>
-            Per E-Mail senden
+            Anfrage senden
           </button>
         </div>
         <p class="form__notiz" role="status" aria-live="polite"></p>
