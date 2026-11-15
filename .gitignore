@@ -8,3 +8,4 @@ _*.html
 
 # Nur für die lokale Vorschau
 .claude/
+.formular-tmp/
